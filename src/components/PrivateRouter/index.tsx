@@ -5,6 +5,7 @@ import { ShoppingBag } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import PrivateRouteContext from "./PrivateRouterContext";
+import { Button } from "../ui/button";
 
 const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
@@ -42,9 +43,15 @@ const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
               <span className="text-sm text-gray-500 hidden sm:block">
                 Olá, {authenticated?.name ?? "Cliente"}
               </span>
-              <button className="p-2 hover:bg-gray-100 rounded-full">
+              <Button
+                title="Meu carrinho"
+                onClick={() => {
+                  router.push("/cart");
+                }}
+                className="p-2 bg-white text-black hover:text-white w-[36px] h-[36px] hover:bg-primary  rounded-full"
+              >
                 <ShoppingBag size={20} />
-              </button>
+              </Button>
             </div>
           </div>
         </header>

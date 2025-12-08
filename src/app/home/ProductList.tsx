@@ -17,8 +17,10 @@ import { AnimatePresence, motion } from "framer-motion";
 import {
   ArrowDown,
   ArrowUp,
+  Check,
   ChevronsLeft,
   ChevronsRight,
+  LoaderCircleIcon,
   Package,
   Search,
   ShoppingCart,
@@ -226,8 +228,21 @@ function ProductCard({ product }: { product: ProductWithImages }) {
     product.images?.[0]?.imageUrl ||
     "https://via.placeholder.com/300?text=Produto";
 
+  const [added, setAdded] = useState(false);
+
   const isOutOfStock = !product.isStockInfinite && product.stockQuantity <= 0;
   const router = usePrivateContext().router;
+
+  const { request: addToCart, isLoading } = useApi({
+    url: "/cart",
+    method: "POST",
+    payload: { productId: product.id },
+    mutationOptions: {
+      onSuccess: () => {
+        setAdded(true);
+      },
+    },
+  });
 
   return (
     <div
@@ -275,7 +290,11 @@ function ProductCard({ product }: { product: ProductWithImages }) {
           </div>
 
           <Button
-            disabled={isOutOfStock}
+            disabled={isOutOfStock || isLoading || added}
+            onClick={(e) => {
+              e.stopPropagation();
+              addToCart({ productId: product.id });
+            }}
             className={`h-10 w-10 rounded-full flex items-center justify-center transition-colors 
               ${
                 isOutOfStock
@@ -283,8 +302,17 @@ function ProductCard({ product }: { product: ProductWithImages }) {
                   : "bg-black text-white hover:bg-blue-600 shadow-md hover:shadow-lg"
               }`}
             aria-label="Adicionar ao carrinho"
+            title={
+              isLoading ? "" : added ? "Adicionado" : "Adicionar ao carrinho"
+            }
           >
-            <ShoppingCart size={18} />
+            {isLoading ? (
+              <LoaderCircleIcon size={18} />
+            ) : added ? (
+              <Check size={18} />
+            ) : (
+              <ShoppingCart size={18} />
+            )}
           </Button>
         </div>
       </div>

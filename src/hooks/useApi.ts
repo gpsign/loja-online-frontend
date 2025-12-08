@@ -49,8 +49,8 @@ export function useApi<TData = unknown, MData = unknown, TVariables = unknown>(
   isError: boolean;
   error: Error | null;
   status: "error" | "success" | "pending" | "idle";
-  request: (variables: TVariables) => void;
-  requestAsync: (variables: TVariables) => Promise<TData>;
+  request: (variables?: TVariables) => void;
+  requestAsync: (variables?: TVariables) => Promise<TData>;
 };
 
 export function useApi<TData = unknown, TVariables = unknown>({
