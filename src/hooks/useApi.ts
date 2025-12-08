@@ -83,7 +83,7 @@ export function useApi<TData = unknown, TVariables = unknown>({
   if (isGet) {
     return {
       ...query,
-      data: (query.data as Any)?.data,
+      data: (query.data as Any)?.data ?? (query.data as Any),
       meta: (query.data as Any)?.meta,
     };
   }

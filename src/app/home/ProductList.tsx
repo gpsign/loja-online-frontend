@@ -1,4 +1,5 @@
 "use client";
+import { usePrivateContext } from "@/components/PrivateRouter/PrivateRouterContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -16,11 +17,11 @@ import { AnimatePresence, motion } from "framer-motion";
 import {
   ArrowDown,
   ArrowUp,
+  ChevronsLeft,
+  ChevronsRight,
   Package,
   Search,
   ShoppingCart,
-  ChevronsRight,
-  ChevronsLeft,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -226,12 +227,16 @@ function ProductCard({ product }: { product: ProductWithImages }) {
     "https://via.placeholder.com/300?text=Produto";
 
   const isOutOfStock = !product.isStockInfinite && product.stockQuantity <= 0;
+  const router = usePrivateContext().router;
 
   return (
     <div
-      className={`group flex flex-col border rounded-xl overflow-hidden bg-white shadow-sm hover:shadow-lg transition-all duration-300 ${
+      className={`group cursor-pointer flex flex-col border rounded-xl overflow-hidden bg-white shadow-sm hover:shadow-lg transition-all duration-300 ${
         isOutOfStock ? "opacity-75" : ""
       }`}
+      onClick={() => {
+        router.push("/product/" + product.id);
+      }}
     >
       <div className="relative h-64 w-full overflow-hidden bg-gray-50">
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -302,7 +307,7 @@ function ProductSkeleton() {
 
         <div className="mt-auto flex justify-between items-center">
           <Skeleton className="h-7 w-32" />
-          <Skeleton className="h-10 w-10 rounded-full" /> 
+          <Skeleton className="h-10 w-10 rounded-full" />
         </div>
       </div>
     </div>
