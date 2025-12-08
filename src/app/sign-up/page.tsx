@@ -58,7 +58,7 @@ export default function RegisterPage() {
             href="/sign-up"
             onClick={(e) => {
               e.preventDefault();
-              router.push("/sign-up");
+              router.push("/sign-in");
             }}
           >
             Faça login!

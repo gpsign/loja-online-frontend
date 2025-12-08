@@ -24,37 +24,31 @@ interface UseApiBaseProps<TData, TVariables> {
   >;
 }
 
-// ---------------------------------------------------------------------------
-// SOBRECARGAS (Aqui ensinamos o TypeScript a diferenciar os retornos)
-// ---------------------------------------------------------------------------
-
-// 1. Assinatura para GET (O request é um Refetch)
-export function useApi<TData = unknown>(
+export function useApi<TData = unknown, MData = unknown>(
   props: UseApiBaseProps<TData, unknown> & { method?: "GET" }
 ): {
   data: TData | undefined;
+  meta: MData | undefined;
   isLoading: boolean;
   isError: boolean;
   error: Error | null;
   status: "error" | "success" | "pending";
-  // No GET, o request é o refetch (não aceita body)
   request: (
     options?: RefetchOptions
   ) => Promise<QueryObserverResult<TData, Error>>;
 };
 
-// 2. Assinatura para POST/PUT/DELETE (O request é um Mutate)
-export function useApi<TData = unknown, TVariables = unknown>(
+export function useApi<TData = unknown, MData = unknown, TVariables = unknown>(
   props: UseApiBaseProps<TData, TVariables> & {
     method: "POST" | "PUT" | "DELETE" | "PATCH";
   }
 ): {
   data: TData | undefined;
+  meta: MData | undefined;
   isLoading: boolean;
   isError: boolean;
   error: Error | null;
   status: "error" | "success" | "pending" | "idle";
-  // No POST, o request aceita variáveis (body)
   request: (variables: TVariables) => void;
   requestAsync: (variables: TVariables) => Promise<TData>;
 };
@@ -87,7 +81,11 @@ export function useApi<TData = unknown, TVariables = unknown>({
   });
 
   if (isGet) {
-    return { ...query, data: (query.data as Any)?.data };
+    return {
+      ...query,
+      data: (query.data as Any)?.data,
+      meta: (query.data as Any)?.meta,
+    };
   }
 
   return {
