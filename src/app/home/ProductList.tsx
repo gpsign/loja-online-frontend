@@ -26,6 +26,7 @@ import {
   ShoppingCart,
 } from "lucide-react";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 export default function ProductList() {
   const [page, setPage] = useState(1);
@@ -240,6 +241,9 @@ function ProductCard({ product }: { product: ProductWithImages }) {
     mutationOptions: {
       onSuccess: () => {
         setAdded(true);
+        toast.info('Adicionado produto "' + product.name + '" ao carrinho', {
+          richColors: true,
+        });
       },
     },
   });

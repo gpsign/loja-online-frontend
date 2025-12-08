@@ -1,16 +1,8 @@
 "use client";
 
-import { useState } from "react";
-import {
-  Trash2,
-  ShoppingBag,
-  ArrowRight,
-  Minus,
-  Plus,
-  LoaderCircleIcon,
-} from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
-import Link from "next/link";
+import PrivateRoute from "@/components/PrivateRouter";
+import { usePrivateContext } from "@/components/PrivateRouter/PrivateRouterContext";
+import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -19,22 +11,21 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
-import { Any, ProductWithImages } from "@/types";
-import PrivateRoute from "@/components/PrivateRouter";
-import { usePrivateContext } from "@/components/PrivateRouter/PrivateRouterContext";
 import { useApi } from "@/hooks/useApi";
-import { QueryClient, useQueryClient } from "@tanstack/react-query";
+import { CartItem } from "@/types";
+import { useQueryClient } from "@tanstack/react-query";
+import { AnimatePresence, motion } from "framer-motion";
+import {
+  ArrowRight,
+  LoaderCircleIcon,
+  Minus,
+  Plus,
+  ShoppingBag,
+  Trash2,
+} from "lucide-react";
+import Link from "next/link";
+import { useState } from "react";
 import { toast } from "sonner";
-
-interface CartItem {
-  id: number;
-  cartId: number;
-  productId: number;
-  quantity: number;
-  addedAt: string;
-  product: ProductWithImages;
-}
 
 export default function Page() {
   return (
@@ -118,7 +109,6 @@ function Cart() {
                         exit={{ opacity: 0, x: 20 }}
                         className="group border-b last:border-0"
                       >
-                        {/* INFO PRODUTO */}
                         <TableCell className="py-4">
                           <div className="flex items-center gap-4">
                             <div className="h-20 w-20 rounded-lg overflow-hidden border bg-gray-100 flex-shrink-0">
@@ -140,26 +130,19 @@ function Cart() {
                           </div>
                         </TableCell>
 
-                        {/* QUANTIDADE */}
                         <TableCell className="text-center">
                           <Quantity item={item} refetchCart={refetchCart} />
                         </TableCell>
 
-                        {/* SUBTOTAL ITEM */}
                         <TableCell className="text-right font-medium">
                           {formatCurrency(item.product.price * item.quantity)}
                         </TableCell>
 
-                        {/* REMOVER */}
                         <TableCell className="text-right">
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="text-gray-400 hover:text-red-600 transition-colors"
-                            // onClick={() => removeItem(item.id)}
-                          >
-                            <Trash2 size={18} />
-                          </Button>
+                          <RemoveItem
+                            refetchCart={refetchCart}
+                            productId={item.productId}
+                          />
                         </TableCell>
                       </motion.tr>
                     ))}
@@ -167,7 +150,6 @@ function Cart() {
                 </Table>
               </div>
             ) : (
-              /* ESTADO VAZIO */
               <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -295,5 +277,39 @@ function Quantity({
         <Plus size={14} />
       </Button>
     </div>
+  );
+}
+
+function RemoveItem({
+  refetchCart,
+  productId,
+}: {
+  refetchCart: VoidFunction;
+  productId: number;
+}) {
+  const { request: removeItem, isLoading: isRemoving } = useApi({
+    url: "/cart",
+    method: "DELETE",
+    payload: { productId },
+    mutationOptions: {
+      onSuccess: () => {
+        toast.success("Removido produto do carrinho", {
+          position: "top-right",
+          richColors: true,
+        });
+        refetchCart();
+      },
+    },
+  });
+
+  return (
+    <Button
+      variant="ghost"
+      size="icon"
+      className="text-gray-400 hover:text-red-600 transition-colors"
+      onClick={() => removeItem()}
+    >
+      {isRemoving ? <LoaderCircleIcon size={18} /> : <Trash2 size={18} />}
+    </Button>
   );
 }

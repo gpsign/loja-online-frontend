@@ -1,7 +1,7 @@
 "use client";
 
 import { User } from "@/types";
-import { ShoppingBag } from "lucide-react";
+import { ShoppingBag, Truck } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import PrivateRouteContext from "./PrivateRouterContext";
@@ -33,7 +33,10 @@ const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
       <div className="min-h-screen flex flex-col">
         <header className="sticky top-0 z-50 w-full border-b bg-white/80 backdrop-blur-xl">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <div className="flex items-center gap-2 font-bold text-xl tracking-tight">
+            <div
+              onClick={() => router.push("/home")}
+              className="flex items-center gap-2 font-bold text-xl tracking-tight cursor-pointer"
+            >
               <div className="w-8 h-8 bg-black text-white rounded-lg flex items-center justify-center">
                 L
               </div>
@@ -51,6 +54,15 @@ const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
                 className="p-2 bg-white text-black hover:text-white w-[36px] h-[36px] hover:bg-primary  rounded-full"
               >
                 <ShoppingBag size={20} />
+              </Button>
+              <Button
+                title="Meus pedidos"
+                onClick={() => {
+                  router.push("/orders");
+                }}
+                className="p-2 bg-white text-black hover:text-white w-[36px] h-[36px] hover:bg-primary  rounded-full"
+              >
+                <Truck size={20} />
               </Button>
             </div>
           </div>
