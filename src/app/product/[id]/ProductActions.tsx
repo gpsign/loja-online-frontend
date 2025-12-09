@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { useApi } from "@/hooks/useApi";
 import { Product } from "@/types";
 import { Check, Edit3, LoaderCircleIcon, ShoppingCart } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 interface ProductActionsProps {
@@ -37,7 +38,7 @@ export default function ProductActions({
   });
 
   const isInactive = product.status == "inactive";
-
+  const router = useRouter();
   return (
     <div className="pt-4 space-y-4">
       {role === "customer" ? (
@@ -83,6 +84,7 @@ export default function ProductActions({
       ) : (
         <Button
           variant="outline"
+          onClick={() => router.push("/product/" + product.id + "/edit")}
           className="w-full h-12 text-lg gap-2 border-2 border-black hover:bg-black hover:text-white transition-all"
         >
           <Edit3 size={20} />

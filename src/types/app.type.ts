@@ -5,6 +5,6 @@ export type User = {
   id: number;
   name: string;
   email: string;
-  role: "customer" | "seller";
+  role: "customer" | "seller" | "admin";
   status: "active" | "inactive";
 };

@@ -78,7 +78,7 @@ export default function RegisterPage() {
               <FormItem>
                 <FormLabel>Nome completo</FormLabel>
                 <FormControl>
-                  <Input placeholder="Ex: Gabriel Silva" {...field} />
+                  <Input placeholder="Ex: João Silva" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -94,7 +94,7 @@ export default function RegisterPage() {
                   <Input
                     type="email"
                     autoComplete="off"
-                    placeholder="seu@email.com"
+                    placeholder="name@mail.com"
                     {...field}
                   />
                 </FormControl>

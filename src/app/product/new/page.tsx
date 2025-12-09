@@ -361,7 +361,7 @@ function AddProduct() {
                         <FormLabel>Preço (R$)</FormLabel>
                         <FormControl>
                           <NumericFormat
-                            customInput={Input} // Usa o estilo do Shadcn
+                            customInput={Input}  
                             name={field.name}
                             value={field.value}
                             onValueChange={(values) => {

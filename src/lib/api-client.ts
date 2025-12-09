@@ -17,6 +17,9 @@ const actions: Record<string, VoidFunction> = {
 
     window.location.href = "/sign-in";
   },
+  home() {
+    window.location.href = "/home";
+  },
 };
 
 export class AppError extends Error {

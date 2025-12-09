@@ -10,6 +10,7 @@ export const productSchema = z.object({
   stockQuantity: z.coerce.number().min(0),
   description: z.string().min(3, "Descrição deve ter pelo menos 3 caracteres"),
   config: productConfigSchema,
+  status: z.enum(["active", "inactive"]).optional(),
   images: z.array(
     z.object({
       imageUrl: z.string(),

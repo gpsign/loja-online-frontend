@@ -42,14 +42,13 @@ export default function CartPage() {
 function Cart() {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const { data, request } = useApi<CartItem[]>({
+  const { data } = useApi<CartItem[]>({
     url: "/cart",
     queryKey: ["cart-items"],
   });
 
   const refetchCart = () => {
     queryClient.invalidateQueries({ queryKey: ["cart-items"] });
-    request();
   };
 
   const items = data ?? [];

@@ -42,7 +42,7 @@ const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
               </div>
               <span>Loja Online</span>
             </div>
-            <div className="flex items-center gap-4">
+            <nav className="flex items-center gap-4">
               <span className="text-sm text-gray-500 hidden sm:block">
                 Olá, {authenticated?.name ?? "Cliente"}
               </span>
@@ -73,7 +73,7 @@ const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
               >
                 <Truck size={20} />
               </Button>
-            </div>
+            </nav>
           </div>
         </header>
 
