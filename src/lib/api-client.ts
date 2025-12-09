@@ -8,6 +8,17 @@ type FetchOptions = RequestInit & {
   params?: Record<string, string | number | boolean>;
 };
 
+const actions: Record<string, VoidFunction> = {
+  logout() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+
+    localStorage.setItem("expired", "true");
+
+    window.location.href = "/sign-in";
+  },
+};
+
 export class AppError extends Error {
   public readonly status: number;
   public readonly code: string;
@@ -75,6 +86,12 @@ export async function httpClient<T>(
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => null);
+
+    const action = actions[errorData.action ?? ""];
+
+    if (action) {
+      action();
+    }
 
     throw new AppError(
       errorData?.message || `Erro: ${response.statusText}`,

@@ -19,9 +19,11 @@ import { Any } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AnimatePresence, motion } from "framer-motion";
 import { AlertCircle } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 export default function LoginPage() {
   const form = useForm<LoginFormValues>({
@@ -67,6 +69,18 @@ export default function LoginPage() {
 
   const rootErrorMessage = form.formState.errors.root?.message ?? "";
 
+  useEffect(() => {
+    const expired = localStorage.getItem("expired");
+    localStorage.removeItem("expired");
+    if (expired !== "true") return;
+    setTimeout(() => {
+      toast.error("Sua sessão expirou. Faça login novamente", {
+        richColors: true,
+        position: "top-right",
+      });
+    }, 200);
+  }, []);
+
   return (
     <AuthCard
       title="Acesse sua conta"
@@ -83,7 +97,7 @@ export default function LoginPage() {
               <FormItem>
                 <FormLabel>E-mail</FormLabel>
                 <FormControl>
-                  <Input placeholder="seu@email.com" {...field} />
+                  <Input placeholder="name@mail.com" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
