@@ -12,9 +12,10 @@ import {
 import { useApi } from "@/hooks/useApi";
 import { ProductWithImages } from "@/types";
 import { motion } from "framer-motion";
-import { ShieldCheck, Truck } from "lucide-react";
+import { LoaderCircle, ShieldCheck, Star, Truck } from "lucide-react";
 import React, { Usable, useCallback, useEffect, useState } from "react";
 import ProductActions from "./ProductActions";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface PageProps {
   params: Usable<{
@@ -27,8 +28,9 @@ export default function ProductDetail({ params }: PageProps) {
 
   const { id } = React.use<{ id: string }>(params);
 
-  const { data: product } = useApi<ProductWithImages>({
+  const { data: product, request: refetch } = useApi<ProductWithImages>({
     url: "/products/" + id,
+    queryKey: ["product" + id],
   });
 
   const [embla, setEmbla] = useState<CarouselApi | null>(null);
@@ -119,10 +121,15 @@ export default function ProductDetail({ params }: PageProps) {
           animate={{ opacity: 1, x: 0 }}
           className="flex flex-col space-y-6"
         >
-          <div className="space-y-2">
+          <div className="space-y-2 flex items-center justify-between">
             <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-gray-900">
               {product.name}
             </h1>
+            <Favorite
+              isFavorite={Boolean(product.favoritedBy?.length)}
+              productId={product.id}
+              refetch={refetch}
+            />
           </div>
 
           <div className="text-4xl font-bold text-gray-900">
@@ -159,5 +166,41 @@ export default function ProductDetail({ params }: PageProps) {
         </motion.div>
       </div>
     </Page>
+  );
+}
+
+function Favorite({
+  productId,
+  isFavorite,
+}: {
+  productId: number;
+  isFavorite: boolean;
+}) {
+  const [favorite, setFavorite] = useState(isFavorite);
+
+  const className = !isFavorite ? "" : "fill-yellow-400 stroke-yellow-400";
+  const queryClient = useQueryClient();
+  const { request, isLoading } = useApi({
+    url: `/products/${productId}/favorites`,
+    method: favorite ? "DELETE" : "POST",
+  });
+
+  return (
+    <div
+      className={isLoading ? "opacity-50" : "cursor-pointer"}
+      onClick={() => {
+        request(
+          {},
+          {
+            onSuccess() {
+              setFavorite((f) => !f);
+              queryClient.invalidateQueries();
+            },
+          }
+        );
+      }}
+    >
+      {isLoading ? <LoaderCircle /> : <Star className={className} />}
+    </div>
   );
 }

@@ -62,6 +62,12 @@ function Cart() {
         });
         refetchCart();
       },
+      onError(e) {
+        toast.error(e.message, {
+          position: "top-right",
+          richColors: true,
+        });
+      },
     },
   });
 

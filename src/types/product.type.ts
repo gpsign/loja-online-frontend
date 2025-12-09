@@ -10,6 +10,7 @@ export interface Product {
   status: ProductStatus;
   publishedAt: Date | null;
   config?: ProductConfig;
+  favoritedBy?: { id: number }[];
 }
 
 export interface ProductConfig {
