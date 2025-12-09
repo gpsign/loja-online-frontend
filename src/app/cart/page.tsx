@@ -1,5 +1,6 @@
 "use client";
 
+import AlertButton from "@/components/AlertButton";
 import Page from "@/components/Page";
 import PageTitle from "@/components/Page/PageHeader";
 import { Button } from "@/components/ui/button";
@@ -13,6 +14,7 @@ import {
 } from "@/components/ui/table";
 import { useApi } from "@/hooks/useApi";
 import { CartItem } from "@/types";
+import { formatCurrency } from "@/utils";
 import { useQueryClient } from "@tanstack/react-query";
 import { AnimatePresence, motion } from "framer-motion";
 import {
@@ -23,6 +25,7 @@ import {
   ShoppingBag,
   Trash2,
 } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -76,12 +79,6 @@ function Cart() {
     0
   );
 
-  const formatCurrency = (val: number) =>
-    new Intl.NumberFormat("pt-BR", {
-      style: "currency",
-      currency: "BRL",
-    }).format(val);
-
   return (
     <>
       <PageTitle
@@ -115,8 +112,10 @@ function Cart() {
                         <TableCell className="py-4">
                           <div className="flex items-center gap-4">
                             <div className="h-20 w-20 rounded-lg overflow-hidden border bg-gray-100 flex-shrink-0">
-                              {/* eslint-disable-next-line @next/next/no-img-element */}
-                              <img
+                              <Image
+                                unoptimized={true}
+                                width={78}
+                                height={78}
                                 src={item.product.images[0]?.imageUrl}
                                 alt={item.product.name}
                                 className="h-full w-full object-cover"
@@ -306,13 +305,13 @@ function RemoveItem({
   });
 
   return (
-    <Button
+    <AlertButton
       variant="ghost"
       size="icon"
       className="text-gray-400 hover:text-red-600 transition-colors"
-      onClick={() => removeItem()}
+      onAction={() => removeItem()}
     >
       {isRemoving ? <LoaderCircleIcon size={18} /> : <Trash2 size={18} />}
-    </Button>
+    </AlertButton>
   );
 }

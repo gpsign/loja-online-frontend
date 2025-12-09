@@ -36,11 +36,13 @@ export default function ProductActions({
     },
   });
 
+  const isInactive = product.status == "inactive";
+
   return (
     <div className="pt-4 space-y-4">
       {role === "customer" ? (
         <div className="flex flex-col sm:flex-row gap-4">
-          {!added && !isLoading && (
+          {!added && !isLoading && !isInactive && (
             <>
               <div className="flex items-center border rounded-lg h-12 w-fit bg-white">
                 <button
@@ -68,7 +70,7 @@ export default function ProductActions({
               </Button>
             </>
           )}
-          {(added || isLoading) && (
+          {(added || isLoading) && !isInactive && (
             <Button
               disabled
               className="flex-1 h-12 text-lg gap-2 bg-black hover:bg-gray-800 transition-all shadow-lg active:scale-95"

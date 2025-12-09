@@ -11,11 +11,13 @@ import {
 } from "@/components/ui/carousel";
 import { useApi } from "@/hooks/useApi";
 import { ProductWithImages } from "@/types";
+import { formatCurrency } from "@/utils";
+import { useQueryClient } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { LoaderCircle, ShieldCheck, Star, Truck } from "lucide-react";
 import React, { Usable, useCallback, useEffect, useState } from "react";
 import ProductActions from "./ProductActions";
-import { useQueryClient } from "@tanstack/react-query";
+import Image from "next/image";
 
 interface PageProps {
   params: Usable<{
@@ -28,7 +30,7 @@ export default function ProductDetail({ params }: PageProps) {
 
   const { id } = React.use<{ id: string }>(params);
 
-  const { data: product, request: refetch } = useApi<ProductWithImages>({
+  const { data: product } = useApi<ProductWithImages>({
     url: "/products/" + id,
     queryKey: ["product" + id],
   });
@@ -54,12 +56,6 @@ export default function ProductDetail({ params }: PageProps) {
     setEmbla(emblaApi);
   }, []);
 
-  const formatCurrency = (val: number) =>
-    new Intl.NumberFormat("pt-BR", {
-      style: "currency",
-      currency: "BRL",
-    }).format(val);
-
   if (!product) {
     return null;
   }
@@ -81,8 +77,9 @@ export default function ProductDetail({ params }: PageProps) {
               {images.map((img, index) => (
                 <CarouselItem key={index}>
                   <div className="aspect-square relative overflow-hidden rounded-2xl border bg-gray-50">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
+                    <Image
+                      unoptimized={true}
+                      fill
                       src={img.imageUrl}
                       alt={`${product.name} - ${index}`}
                       className="object-cover w-full h-full"
@@ -102,8 +99,10 @@ export default function ProductDetail({ params }: PageProps) {
           <div className="flex  justify-center overflow-x-auto py-2">
             {images.map((img, i) => (
               <div key={img.id} className="overflow-hidden p-2 ">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
+                <Image
+                  width={80}
+                  height={80}
+                  unoptimized={true}
                   onClick={() => handleThumbClick(i)}
                   key={i}
                   src={img.imageUrl}
@@ -128,7 +127,6 @@ export default function ProductDetail({ params }: PageProps) {
             <Favorite
               isFavorite={Boolean(product.favoritedBy?.length)}
               productId={product.id}
-              refetch={refetch}
             />
           </div>
 

@@ -37,7 +37,7 @@ export default function PageTitle({
             </span>
           </div>
         )}
-        <h1 className="text-3xl font-bold tracking-tight text-gray-900 flex gap-2">
+        <h1 className="text-3xl font-bold tracking-tight text-gray-900 flex gap-2 items-center">
           {icon}
           <span>{title}</span>
         </h1>

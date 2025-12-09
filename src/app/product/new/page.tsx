@@ -45,6 +45,7 @@ import React, { useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { NumericFormat } from "react-number-format";
+import Image from "next/image";
 
 export default function AddProductPage() {
   return (
@@ -264,8 +265,9 @@ function AddProduct() {
                   <TableRow key={i}>
                     <TableCell>
                       {product.images[0]?.imageUrl ? (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img
+                        <Image
+                          fill
+                          unoptimized={true}
                           src={product.images[0].imageUrl}
                           className="h-10 w-10 object-cover rounded border"
                           alt="Preview"
@@ -440,8 +442,9 @@ function AddProduct() {
                       key={field.id}
                       className="relative group border rounded-lg p-2 bg-slate-50"
                     >
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
+                      <Image
+                        unoptimized={true}
+                        fill
                         src={field.imageUrl}
                         alt="Preview"
                         className="w-full h-32 object-cover rounded"

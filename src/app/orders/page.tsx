@@ -15,8 +15,10 @@ import {
 } from "@/components/ui/table";
 import { useApi } from "@/hooks/useApi";
 import { OrderItem } from "@/types";
+import { formatCurrency } from "@/utils";
 import { motion } from "framer-motion";
 import { Truck } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -102,12 +104,6 @@ function Orders() {
 }
 
 function Order({ data }: { data: OrderItem }) {
-  const formatCurrency = (val: number) =>
-    new Intl.NumberFormat("pt-BR", {
-      style: "currency",
-      currency: "BRL",
-    }).format(val);
-
   return (
     <div className="border bg-white rounded-xl shadow-md px-6 py-4 flex flex-col gap-5">
       <div className="flex justify-between align-center">
@@ -139,8 +135,10 @@ function Order({ data }: { data: OrderItem }) {
                 <TableCell className="py-4">
                   <div className="flex items-center gap-4">
                     <div className="h-20 w-20 rounded-lg overflow-hidden border bg-gray-100 flex-shrink-0">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
+                      <Image
+                        width={78}
+                        height={78}
+                        unoptimized={true}
                         src={item.product.images[0]?.imageUrl}
                         alt={item.product.name}
                         className="h-full w-full object-cover"

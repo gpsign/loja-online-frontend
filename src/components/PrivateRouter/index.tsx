@@ -1,7 +1,7 @@
 "use client";
 
 import { User } from "@/types";
-import { ShoppingBag, Truck } from "lucide-react";
+import { ShoppingBag, Truck, UserIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
@@ -46,6 +46,15 @@ const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
               <span className="text-sm text-gray-500 hidden sm:block">
                 Olá, {authenticated?.name ?? "Cliente"}
               </span>
+              <Button
+                title="Meu perfil"
+                onClick={() => {
+                  router.push("/profile");
+                }}
+                className="p-2 bg-white text-black hover:text-white w-[36px] h-[36px] hover:bg-primary  rounded-full"
+              >
+                <UserIcon size={20} />
+              </Button>
               <Button
                 title="Meu carrinho"
                 onClick={() => {
