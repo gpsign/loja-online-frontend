@@ -1,7 +1,7 @@
 "use client";
 
-import PrivateRoute from "@/components/PrivateRouter";
-import { usePrivateContext } from "@/components/PrivateRouter/PrivateRouterContext";
+import Page from "@/components/Page";
+import PageTitle from "@/components/Page/PageHeader";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -24,19 +24,20 @@ import {
   Trash2,
 } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 
-export default function Page() {
+export default function CartPage() {
   return (
-    <PrivateRoute>
+    <Page>
       <Cart />
-    </PrivateRoute>
+    </Page>
   );
 }
 
 function Cart() {
-  const router = usePrivateContext().router;
+  const router = useRouter();
   const queryClient = useQueryClient();
   const { data, request } = useApi<CartItem[]>({
     url: "/cart",
@@ -76,21 +77,17 @@ function Cart() {
     }).format(val);
 
   return (
-    <div className="container mx-auto px-4 py-8 md:py-12 min-h-[70vh]">
-      <div className="flex items-center gap-3 mb-8">
-        <ShoppingBag className="h-8 w-8 text-gray-900" />
-        <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
-          Meu Carrinho
-        </h1>
-      </div>
-
+    <>
+      <PageTitle
+        title="Meu Carrinho"
+        icon={<ShoppingBag className="h-8 w-8 text-gray-900" />}
+      />
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
-        {/* --- LISTAGEM DE PRODUTOS --- */}
         <div className="lg:col-span-2 space-y-4">
           <AnimatePresence mode="popLayout">
             {items.length > 0 ? (
               <div className="border rounded-xl bg-white overflow-hidden shadow-sm">
-                <Table>
+                <Table className="overflow-hidden">
                   <TableHeader className="hidden md:table-header-group bg-gray-50">
                     <TableRow>
                       <TableHead className="w-[400px]">Produto</TableHead>
@@ -225,7 +222,7 @@ function Cart() {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 

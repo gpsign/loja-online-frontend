@@ -1,9 +1,7 @@
 import { User } from "@/types";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { createContext, useContext } from "react";
 
 type PrivateRouteContextType = {
-  router: AppRouterInstance;
   user: User;
 };
 

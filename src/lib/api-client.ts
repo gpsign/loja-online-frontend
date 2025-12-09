@@ -5,19 +5,27 @@ const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 type FetchOptions = RequestInit & {
   body?: Any;
-  params?: Record<string, string | number | boolean>; 
+  params?: Record<string, string | number | boolean>;
 };
 
 export class AppError extends Error {
-  public readonly code?: string;
-  public readonly issues?: Any[]; 
+  public readonly status: number;
+  public readonly code: string;
+  public readonly isOperational: boolean;
+  public readonly issues?: { field: string; message: string }[];
 
-  constructor(message: string, data?: Any) {
+  constructor(
+    message: string,
+    status: number = 400,
+    code: string = "app_error",
+    data?: Any
+  ) {
     super(message);
-    this.name = "AppError";
+    this.status = status;
+    this.isOperational = true;
+    this.code = code;
 
     if (data) {
-      this.code = data.code;
       this.issues = data.issues;
     }
   }
@@ -67,8 +75,11 @@ export async function httpClient<T>(
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => null);
+
     throw new AppError(
       errorData?.message || `Erro: ${response.statusText}`,
+      response.status,
+      errorData.code,
       errorData
     );
   }

@@ -1,12 +1,14 @@
-import { httpClient } from "@/lib/api-client";
+import { AppError, httpClient } from "@/lib/api-client";
 import { Any } from "@/types";
 import {
+  MutateOptions,
   QueryKey,
   QueryObserverResult,
   RefetchOptions,
   useMutation,
   UseMutationOptions,
   useQuery,
+  useQueryClient,
   UseQueryOptions,
 } from "@tanstack/react-query";
 
@@ -49,8 +51,14 @@ export function useApi<TData = unknown, MData = unknown, TVariables = unknown>(
   isError: boolean;
   error: Error | null;
   status: "error" | "success" | "pending" | "idle";
-  request: (variables?: TVariables) => void;
-  requestAsync: (variables?: TVariables) => Promise<TData>;
+  request: (
+    variables?: TVariables,
+    options?: MutateOptions<TData, Error, TVariables, unknown>
+  ) => void;
+  requestAsync: (
+    variables?: TVariables,
+    options?: MutateOptions<TData, Error, TVariables, unknown>
+  ) => Promise<TData>;
 };
 
 export function useApi<TData = unknown, TVariables = unknown>({
@@ -63,13 +71,11 @@ export function useApi<TData = unknown, TVariables = unknown>({
 }: UseApiBaseProps<TData, TVariables> & { method?: HttpMethod }) {
   const isGet = method === "GET";
 
-  // --- LÓGICA DO GET ---
   const query = useQuery<TData, Error>({
     queryKey: queryKey || [url],
     queryFn: () =>
       httpClient<TData>(url, { params: payload as Any, method: "GET" }),
     enabled: isGet && (queryOptions?.enabled ?? true),
-    ...queryOptions,
   });
 
   const mutation = useMutation<TData, Error, TVariables>({

@@ -2,13 +2,7 @@ import { usePrivateContext } from "@/components/PrivateRouter/PrivateRouterConte
 import { Button } from "@/components/ui/button";
 import { useApi } from "@/hooks/useApi";
 import { Product } from "@/types";
-import {
-  Check,
-  Edit3,
-  LoaderCircleIcon,
-  LoaderIcon,
-  ShoppingCart,
-} from "lucide-react";
+import { Check, Edit3, LoaderCircleIcon, ShoppingCart } from "lucide-react";
 import { useState } from "react";
 
 interface ProductActionsProps {

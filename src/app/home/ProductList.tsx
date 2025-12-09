@@ -20,11 +20,13 @@ import {
   Check,
   ChevronsLeft,
   ChevronsRight,
+  ImageOff,
   LoaderCircleIcon,
   Package,
   Search,
   ShoppingCart,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -141,7 +143,7 @@ export default function ProductList() {
         {isLoading ? (
           <motion.div
             key="loader"
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, transition: { duration: 0.2 } }}
@@ -153,7 +155,7 @@ export default function ProductList() {
         ) : (
           <motion.div
             key="content"
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.2 }}
@@ -225,14 +227,13 @@ const formatCurrency = (value: number) =>
   );
 
 function ProductCard({ product }: { product: ProductWithImages }) {
-  const mainImage =
-    product.images?.[0]?.imageUrl ||
-    "https://via.placeholder.com/300?text=Produto";
+  const mainImage = product.images?.[0]?.imageUrl;
 
   const [added, setAdded] = useState(false);
 
-  const isOutOfStock = !product.isStockInfinite && product.stockQuantity <= 0;
-  const router = usePrivateContext().router;
+  const isOutOfStock =
+    !product.config?.isStockInfinite && product.stockQuantity <= 0;
+  const router = useRouter();
 
   const { request: addToCart, isLoading } = useApi({
     url: "/cart",
@@ -258,14 +259,24 @@ function ProductCard({ product }: { product: ProductWithImages }) {
       }}
     >
       <div className="relative h-64 w-full overflow-hidden bg-gray-50">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={mainImage}
-          alt={product.name}
-          className={`h-full w-full object-cover transition-transform duration-500 group-hover:scale-110 ${
-            isOutOfStock ? "grayscale" : ""
-          }`}
-        />
+        {mainImage ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={mainImage}
+            alt={product.name}
+            className={`h-full w-full object-cover transition-transform duration-500 group-hover:scale-110 ${
+              isOutOfStock ? "grayscale" : ""
+            }`}
+          />
+        ) : (
+          <div
+            className={
+              "h-full w-full flex items-center justify-center opacity-50"
+            }
+          >
+            <ImageOff size={64} />
+          </div>
+        )}
 
         {isOutOfStock && (
           <div className="absolute inset-0 flex items-center justify-center bg-black/40">

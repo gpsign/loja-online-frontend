@@ -4,8 +4,8 @@ import { User } from "@/types";
 import { ShoppingBag, Truck } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import PrivateRouteContext from "./PrivateRouterContext";
 import { Button } from "../ui/button";
+import PrivateRouteContext from "./PrivateRouterContext";
 
 const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
@@ -29,7 +29,7 @@ const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
   }
 
   return (
-    <PrivateRouteContext.Provider value={{ router, user: authenticated }}>
+    <PrivateRouteContext.Provider value={{ user: authenticated }}>
       <div className="min-h-screen flex flex-col">
         <header className="sticky top-0 z-50 w-full border-b bg-white/80 backdrop-blur-xl">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">

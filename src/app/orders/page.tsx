@@ -1,7 +1,7 @@
 "use client";
 
-import PrivateRoute from "@/components/PrivateRouter";
-import { usePrivateContext } from "@/components/PrivateRouter/PrivateRouterContext";
+import Page from "@/components/Page";
+import PageTitle from "@/components/Page/PageHeader";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -18,6 +18,7 @@ import { OrderItem } from "@/types";
 import { motion } from "framer-motion";
 import { Truck } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const statusLabelMap: Record<OrderItem["status"], string> = {
   canceled: "Cancelado",
@@ -35,16 +36,16 @@ const statusColorMap: Record<OrderItem["status"], string> = {
   shipped: "bg-yellow-100 text-black",
 };
 
-export default function Page() {
+export default function OrderPage() {
   return (
-    <PrivateRoute>
+    <Page>
       <Orders />
-    </PrivateRoute>
+    </Page>
   );
 }
 
 function Orders() {
-  const router = usePrivateContext().router;
+  const router = useRouter();
 
   const { data } = useApi<OrderItem[]>({
     url: "/orders",
@@ -54,14 +55,11 @@ function Orders() {
   const items = data ?? [];
 
   return (
-    <div className="container mx-auto px-4 py-8 md:py-12 min-h-[70vh]">
-      <div className="flex items-center gap-3 mb-8">
-        <Truck className="h-8 w-8 text-gray-900" />
-        <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
-          Meus Pedidos
-        </h1>
-      </div>
-
+    <>
+      <PageTitle
+        title="Meus Pedidos"
+        icon={<Truck className="h-8 w-8 text-gray-900" />}
+      />
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
         <div className="lg:col-span-2 space-y-4">
           {items.length > 0 ? (
@@ -87,7 +85,7 @@ function Orders() {
                 href="/home"
                 onClick={(e) => {
                   e.preventDefault();
-                  router.push("/Orders");
+                  router.push("/cart");
                 }}
                 passHref
               >
@@ -99,7 +97,7 @@ function Orders() {
           )}
         </div>
       </div>
-    </div>
+    </>
   );
 }
 
@@ -120,7 +118,7 @@ function Order({ data }: { data: OrderItem }) {
       </div>
 
       <div className="border rounded-sm bg-white overflow-hidden shadow-sm">
-        <Table>
+        <Table className="overflow-hidden">
           <TableHeader className="hidden md:table-header-group bg-gray-50">
             <TableRow>
               <TableHead className="w-[400px]">Produto</TableHead>
