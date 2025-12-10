@@ -20,12 +20,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { AnimatePresence, motion } from "framer-motion";
 import { AlertCircle } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 export default function LoginPage() {
+  const [redirecting, setRedirecting] = useState(false);
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -49,6 +50,7 @@ export default function LoginPage() {
         localStorage.setItem("user", JSON.stringify(user));
         localStorage.setItem("token", token);
         router.push("/home");
+        setRedirecting(true);
       },
       onError: (error) => {
         if (error instanceof AppError) {
@@ -80,6 +82,8 @@ export default function LoginPage() {
       });
     }, 200);
   }, []);
+
+  const disabled = isLoading || redirecting;
 
   return (
     <AuthCard
@@ -142,8 +146,8 @@ export default function LoginPage() {
               </motion.div>
             )}
           </AnimatePresence>
-          <Button disabled={isLoading} type="submit" className="w-full ">
-            {isLoading ? "Entrando" : "Entrar"}
+          <Button disabled={disabled} type="submit" className="w-full ">
+            {disabled ? "Entrando" : "Entrar"}
           </Button>
         </form>
       </Form>

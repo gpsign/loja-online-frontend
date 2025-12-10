@@ -23,10 +23,12 @@ import { AppError } from "@/lib/api-client";
 import { LoginFormValues, RegisterFormValues, registerSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 export default function RegisterPage() {
+  const [redirecting, setRedirecting] = useState(false);
   const form = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
@@ -54,6 +56,7 @@ export default function RegisterPage() {
           position: "top-right",
         });
         router.push("/sign-in");
+        setRedirecting(true);
       },
       onError: (error) => {
         if (error instanceof AppError) {
@@ -63,6 +66,8 @@ export default function RegisterPage() {
       },
     });
   }
+
+  const disabled = isLoading || redirecting;
 
   return (
     <AuthCard
@@ -171,8 +176,8 @@ export default function RegisterPage() {
               </FormItem>
             )}
           />
-          <Button disabled={isLoading} type="submit" className="w-full mt-6">
-            {isLoading ? "Cadastrando" : "Cadastrar"}
+          <Button disabled={disabled} type="submit" className="w-full mt-6">
+            {disabled ? "Cadastrando" : "Cadastrar"}
           </Button>
         </form>
       </Form>
