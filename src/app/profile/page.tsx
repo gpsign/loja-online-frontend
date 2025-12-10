@@ -102,7 +102,7 @@ function Profile() {
   const isActive = isSeller && status === "active";
 
   const switchStatus = (newStatus: User["status"]) => {
-    const newUser = {...user, status: newStatus}
+    const newUser = { ...user, status: newStatus };
     localStorage.setItem("user", JSON.stringify(newUser));
     queryClient.invalidateQueries();
     setStatus(newStatus);
@@ -222,7 +222,7 @@ function Profile() {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as Any)}
-              className={`flex items-center gap-2 pb-4 px-2 text-sm font-medium transition-all relative ${
+              className={`flex items-center gap-2 pb-4 px-2 text-sm font-medium transition-all relative whitespace-nowrap ${
                 isActive ? "text-black" : "text-gray-500 hover:text-gray-800"
               }`}
             >
@@ -240,7 +240,7 @@ function Profile() {
         {activeTab === "overview" && isSeller && <OverviewGraph />}
         {activeTab === "products" && isSeller && (
           <div>
-            <div className="flex justify-between items-center mb-6">
+            <div className="flex flex-wrap gap-2 justify-between items-center mb-6">
               <h2 className="text-xl font-bold text-gray-900">
                 Gerenciar Inventário
               </h2>
@@ -256,7 +256,7 @@ function Profile() {
                 ))}
               </div>
             ) : (
-              <div className="text-center py-20 rounded-xl border border-dashed border-gray-200">
+              <div className="text-center py-20 rounded-xl ">
                 <Package className="mx-auto text-gray-300 mb-4" size={48} />
                 <p className="text-gray-500">
                   Você ainda não cadastrou nenhum produto.
@@ -283,7 +283,7 @@ function Profile() {
                 ))}
               </div>
             ) : (
-              <div className="text-center py-20 bg-white rounded-xl border border-dashed border-gray-200">
+              <div className="text-center py-20 rounded-xl ">
                 <Heart className="mx-auto text-gray-300 mb-4" size={48} />
                 <p className="text-gray-500">
                   Sua lista de favoritos está vazia.

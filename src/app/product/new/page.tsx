@@ -353,7 +353,7 @@ function AddProduct() {
                     </FormItem>
                   )}
                 />
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <FormField
                     control={form.control}
                     name="price"
@@ -436,12 +436,25 @@ function AddProduct() {
               <CardHeader>
                 <CardTitle>Imagens do Produto</CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-3 gap-4 mb-4">
+              <CardContent className="gap-y-4 flex flex-col">
+                <label className="w-full sm:w-[50%] mx-auto shrink-0 border-2 border-dashed rounded-lg h-32 flex flex-col items-center justify-center cursor-pointer hover:bg-slate-50 transition-colors">
+                  <Upload className="h-8 w-8 text-slate-400" />
+                  <span className="text-xs text-slate-500 mt-2">
+                    Upload Imagem
+                  </span>
+                  <input
+                    type="file"
+                    multiple
+                    accept="image/*"
+                    className="hidden"
+                    onChange={handleImageUpload}
+                  />
+                </label>
+                <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-4 mb-4">
                   {fields.map((field, index) => (
                     <div
                       key={field.id}
-                      className="relative group border rounded-lg p-2 bg-slate-50"
+                      className="relative group border rounded-lg p-2 bg-slate-50 aspect-3/2"
                     >
                       <Image
                         unoptimized={true}
@@ -477,19 +490,6 @@ function AddProduct() {
                       </p>
                     </div>
                   ))}
-                  <label className="border-2 border-dashed rounded-lg h-32 flex flex-col items-center justify-center cursor-pointer hover:bg-slate-50 transition-colors">
-                    <Upload className="h-8 w-8 text-slate-400" />
-                    <span className="text-xs text-slate-500 mt-2">
-                      Upload Imagem
-                    </span>
-                    <input
-                      type="file"
-                      multiple
-                      accept="image/*"
-                      className="hidden"
-                      onChange={handleImageUpload}
-                    />
-                  </label>
                 </div>
               </CardContent>
             </Card>

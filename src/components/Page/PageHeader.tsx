@@ -3,6 +3,7 @@ import { ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { Button } from "../ui/button";
+import { isMobile } from "@/utils";
 
 interface PageTitleProps extends React.PropsWithChildren {
   title?: string;
@@ -19,10 +20,11 @@ export default function PageTitle({
   goBack,
 }: PageTitleProps) {
   const router = useRouter();
-  const renderGoBack = window.location.pathname != "/home" && goBack != false;
+  const renderGoBack =
+    !isMobile() && window.location.pathname != "/home" && goBack != false;
 
   return (
-    <div className="mb-8 flex items-baseline-last justify-between">
+    <div className="mb-8 flex items-baseline-last justify-between flex-wrap">
       <div>
         {renderGoBack && (
           <div className="flex gap-2 mb-1 -mt-8">
@@ -43,7 +45,11 @@ export default function PageTitle({
         </h1>
         <p className="mt-2 text-gray-500">{subtitle}</p>
       </div>
-      {children}
+      {children && (
+        <div className="flex gap-2 items-center justify-end ml-auto">
+          {children}
+        </div>
+      )}
     </div>
   );
 }

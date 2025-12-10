@@ -98,7 +98,10 @@ export default function ProductDetail({ params }: PageProps) {
 
           <div className="flex  justify-center overflow-x-auto py-2">
             {images.map((img, i) => (
-              <div key={img.id} className="overflow-hidden p-2 ">
+              <div
+                key={img.id}
+                className="overflow-hidden p-2 flex-none basis-auto"
+              >
                 <Image
                   width={80}
                   height={80}
@@ -106,7 +109,9 @@ export default function ProductDetail({ params }: PageProps) {
                   onClick={() => handleThumbClick(i)}
                   key={i}
                   src={img.imageUrl}
-                  style={{ transform: currentIndex == i ? "scale(1.2)" : "" }}
+                  style={{
+                    transform: currentIndex == i ? "scale(1.2)" : "",
+                  }}
                   className="w-20 h-20 object-cover rounded-md border cursor-pointer hover:border-black transition-all"
                   alt={img.imageUrl}
                 />

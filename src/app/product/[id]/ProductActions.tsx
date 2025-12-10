@@ -42,7 +42,7 @@ export default function ProductActions({
   return (
     <div className="pt-4 space-y-4">
       {role === "customer" ? (
-        <div className="flex flex-col sm:flex-row gap-4">
+        <div className="flex flex-col items-center sm:flex-row gap-4">
           {!added && !isLoading && !isInactive && (
             <>
               <div className="flex items-center border rounded-lg h-12 w-fit bg-white">

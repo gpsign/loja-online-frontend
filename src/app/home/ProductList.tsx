@@ -12,6 +12,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { useApi } from "@/hooks/useApi";
 import { ProductWithImages } from "@/types";
+import { isMobile } from "@/utils";
 import { AnimatePresence, motion } from "framer-motion";
 
 import {
@@ -122,7 +123,7 @@ export default function ProductList() {
           </Button>
 
           <select
-            className="h-10 rounded-md border border-input bg-background px-3 py-2 text-sm"
+            className="h-10 rounded-md border border-input bg-background px-3 py-2 text-sm flex-grow"
             value={size}
             onChange={(e) => setSize(Number(e.target.value))}
           >
@@ -172,12 +173,17 @@ export default function ProductList() {
       </AnimatePresence>
 
       {Number(data?.length) > 0 && (
-        <div className="flex items-center justify-between py-4">
-          <div className="text-sm text-gray-500">
-            Mostrando página <span className="font-medium">{page}</span> de{" "}
-            <span className="font-medium">{totalPag}</span> ({total} resultados)
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 py-4">
+          <div className="max-sm:order-2 sm:order-1 max-sm:w-full flex text-sm text-gray-500 justify-center gap-[4px]">
+            {!isMobile() && "Mostrando página"}{" "}
+            <span className="flex gap-[3px]">
+              <span className="font-semibold">{page}</span> <span>de</span>
+              <span className="font-semibold">{totalPag}</span>{" "}
+            </span>
+            <span className="ml-1">({total} resultados)</span>
           </div>
-          <div className="flex gap-2">
+
+          <div className="flex gap-2 max-sm:order-1 sm:order-2 justify-center">
             <Button
               onClick={changePage(-page)}
               disabled={page === 1 && !isLoading}
