@@ -1,5 +1,6 @@
 "use client";
 import { Any } from "@/types";
+import { toast } from "sonner";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -94,6 +95,13 @@ export async function httpClient<T>(
 
     if (action) {
       action();
+    }
+
+    if (response.status === 500) {
+      toast.error("Ocorreu um erro, tente novamente mais tarde", {
+        richColors: true,
+        position: "top-right",
+      });
     }
 
     throw new AppError(

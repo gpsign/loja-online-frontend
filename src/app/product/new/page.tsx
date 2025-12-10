@@ -71,6 +71,7 @@ const downloadCSVTemplate = () => {
     "stockQuantity",
     "isStockInfinite",
     "description",
+    "image",
   ];
   const csvContent =
     headers.join(",") +
@@ -361,7 +362,7 @@ function AddProduct() {
                         <FormLabel>Preço (R$)</FormLabel>
                         <FormControl>
                           <NumericFormat
-                            customInput={Input}  
+                            customInput={Input}
                             name={field.name}
                             value={field.value}
                             onValueChange={(values) => {

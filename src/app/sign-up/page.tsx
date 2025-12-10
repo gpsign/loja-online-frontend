@@ -39,7 +39,10 @@ export default function RegisterPage() {
   });
 
   const router = useRouter();
-  const { request: submit } = useApi({ url: "/sign-up", method: "POST" });
+  const { request: submit, isLoading } = useApi({
+    url: "/sign-up",
+    method: "POST",
+  });
 
   function onSubmit(data: LoginFormValues) {
     form.clearErrors();
@@ -78,7 +81,11 @@ export default function RegisterPage() {
               <FormItem>
                 <FormLabel>Nome completo</FormLabel>
                 <FormControl>
-                  <Input placeholder="Ex: João Silva" {...field} />
+                  <Input
+                    autoComplete="name"
+                    placeholder="Ex: João Silva"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -164,8 +171,8 @@ export default function RegisterPage() {
               </FormItem>
             )}
           />
-          <Button type="submit" className="w-full mt-6">
-            Cadastrar
+          <Button disabled={isLoading} type="submit" className="w-full mt-6">
+            {isLoading ? "Cadastrando" : "Cadastrar"}
           </Button>
         </form>
       </Form>
