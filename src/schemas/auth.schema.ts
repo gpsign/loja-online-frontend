@@ -1,18 +1,35 @@
 import * as z from "zod";
 
-export const passwordSchema = z
-  .string()
-  .min(8, { message: "A senha deve ter no mínimo 8 caracteres." })
-  .regex(/[A-Z]/, {
-    message: "A senha deve conter pelo menos uma letra maiúscula.",
-  })
-  .regex(/[a-z]/, {
-    message: "A senha deve conter pelo menos uma letra minúscula.",
-  })
-  .regex(/[0-9]/, { message: "A senha deve conter pelo menos um número." })
-  .regex(/[\W_]/, {
-    message: "A senha deve conter pelo menos um caractere especial (ex: !@#$).",
-  });
+export const passwordSchema = z.string().superRefine((val, ctx) => {
+  const errors = [];
+
+  if (val.length < 8) {
+    errors.push("No mínimo 8 caracteres.");
+  }
+
+  if (!/[A-Z]/.test(val)) {
+    errors.push("Uma letra maiúscula.");
+  }
+
+  if (!/[a-z]/.test(val)) {
+    errors.push("Uma letra minúscula.");
+  }
+
+  if (!/[0-9]/.test(val)) {
+    errors.push("Um número.");
+  }
+
+  if (!/[\W_]/.test(val)) {
+    errors.push("Um caractere especial (ex: !@#$).");
+  }
+
+  if (errors.length) {
+    ctx.addIssue({
+      code: "custom",
+      message: "A senha deve conter:\n\t• " + errors.join("\n\t• "),
+    });
+  }
+});
 
 export const loginSchema = z.object({
   email: z.email({

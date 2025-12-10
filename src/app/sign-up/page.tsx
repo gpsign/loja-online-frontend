@@ -31,6 +31,7 @@ export default function RegisterPage() {
   const [redirecting, setRedirecting] = useState(false);
   const form = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
+    criteriaMode: "all",
     defaultValues: {
       name: "",
       email: "",
@@ -131,9 +132,9 @@ export default function RegisterPage() {
                   </FormControl>
                   <SelectContent>
                     <SelectItem value="customer">
-                      Cliente (Comprador)
+                      Cliente
                     </SelectItem>
-                    <SelectItem value="seller">Vendedor (Loja)</SelectItem>
+                    <SelectItem value="seller">Vendedor</SelectItem>
                   </SelectContent>
                 </Select>
                 <FormMessage />
@@ -154,7 +155,7 @@ export default function RegisterPage() {
                     {...field}
                   />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="whitespace-pre-wrap"/>
               </FormItem>
             )}
           />
